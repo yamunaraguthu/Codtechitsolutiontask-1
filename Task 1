@@ -50,4 +50,134 @@ plt.title('Housing Prices vs. Square Footage')
 plt.xlabel('Square Footage')
 plt.ylabel('Price (in dollars)')
 plt.legend()
+plt.show() 
+
+/*LINEAR REGRESSION OF NUMBER OF BEDROOMS OF HOUSING PRICE*/
+
+# Import necessary libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Example dataset: Number of bedrooms and price
+data = {
+    'bedrooms': [1, 2, 3, 3, 4, 4, 5, 6, 7, 8],
+    'price': [150000, 180000, 200000, 210000, 250000, 260000, 310000, 370000, 450000, 500000]
+}
+
+# Create a DataFrame
+df = pd.DataFrame(data)
+
+# Features (independent variable) and target (dependent variable)
+X = df[['bedrooms']]  # Number of bedrooms
+y = df['price']  # Price (in dollars)
+
+# Split data into training and testing sets (80% training, 20% testing)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a Linear Regression model
+model = LinearRegression()
+
+# Train the model using the training data
+model.fit(X_train, y_train)
+
+# Predict prices using the testing data
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+# Print results
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"R-Squared (R²): {r2}")
+print(f"Intercept: {model.intercept_}")
+print(f"Coefficient (Bedrooms): {model.coef_[0]}")
+
+# Plot the data points and regression line
+plt.scatter(X, y, color='blue', label='Actual Data')  # Scatter plot of data
+plt.plot(X, model.predict(X), color='red', label='Regression Line')  # Regression line
+plt.title('Housing Prices vs. Number of Bedrooms')
+plt.xlabel('Number of Bedrooms')
+plt.ylabel('Price (in dollars)')
+plt.legend()
 plt.show()
+
+
+
+/* LINEAR REGRESSION OF THE LOCATION ON HOUSING PRICES*/
+# Import necessary libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.preprocessing import OneHotEncoder
+
+# Example dataset: Locations and prices
+data = {
+    'location': ['Downtown', 'Suburb', 'Suburb', 'Downtown', 'Rural', 'Rural', 'Downtown', 'Suburb', 'Rural', 'Downtown'],
+    'price': [400000, 250000, 270000, 450000, 180000, 200000, 420000, 260000, 190000, 430000]
+}
+
+# Create a DataFrame
+df = pd.DataFrame(data)
+
+# Apply One-Hot Encoding to the 'location' column
+onehot_encoder = OneHotEncoder(sparse=False)
+location_encoded = onehot_encoder.fit_transform(df[['location']])
+
+# Create a DataFrame with one-hot encoded locations
+location_df = pd.DataFrame(location_encoded, columns=onehot_encoder.get_feature_names_out(['location']))
+
+# Combine one-hot encoded locations with the original price column
+df_encoded = pd.concat([location_df, df['price']], axis=1)
+
+# Features (independent variables) and target (dependent variable)
+X = df_encoded.drop('price', axis=1)  # Encoded locations as features
+y = df_encoded['price']  # Price (in dollars)
+
+# Split data into training and testing sets (80% training, 20% testing)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a Linear Regression model
+model = LinearRegression()
+
+# Train the model using the training data
+model.fit(X_train, y_train)
+
+# Predict prices using the testing data
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+# Print results
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"R-Squared (R²): {r2}")
+print(f"Intercept: {model.intercept_}")
+print(f"Coefficients: {model.coef_}")
+print(f"One-Hot Encoded Location Columns: {X.columns}")
+
+# Plot the actual vs predicted prices
+plt.scatter(y_test, y_pred, color='blue')
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red')  # Diagonal line
+plt.xlabel('Actual Prices')
+plt.ylabel('Predicted Prices')
+plt.title('Actual vs Predicted Housing Prices (Based on Location)')
+plt.show()
+
+
+
+
+
+
+
+
+
+
