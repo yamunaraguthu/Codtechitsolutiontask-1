@@ -10,6 +10,9 @@ Square footage
 Number of bedrooms
 Locations
 
+[Screenshot (207)](https://github.com/user-attachments/assets/65049c0b-5918-444d-947d-3309d25f5bd5)
+
+
 
 
 
